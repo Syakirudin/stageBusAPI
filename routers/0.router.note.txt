@@ -1,0 +1,13 @@
+router is the middle main to controller and index.js
+
+need to import thing
+
+import <module> from 'path/from/the/controller'
+
+make an object 
+
+const <object> = express.Router();
+
+object.get(something,something)
+
+export {object};

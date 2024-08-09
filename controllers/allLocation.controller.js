@@ -1,0 +1,5 @@
+class allLocationController {
+    constructor(parameters) {
+        
+    }
+}
