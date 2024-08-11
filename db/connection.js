@@ -1,5 +1,5 @@
 import pg from "pg";
-import { createAllTables} from "../models/tableCreate.js";
+import { createAllTables} from "../models/tableConnection.js";
 
 
 const { Pool } = pg;
