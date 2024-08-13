@@ -91,4 +91,4 @@ class BusStopModel {
 
 }
 
-export default BusStopModel
+export default new BusStopModel ();

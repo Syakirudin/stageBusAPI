@@ -16,6 +16,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/user", UserRouter);
 app.use("/busStop", BusStopRouter);
 
+
+//not found controller
+app.use("*", errorRouter);
+
+
+
+
 //GET health controller
 app.get("/", function (req, res) {
   const resObj = {
@@ -25,8 +32,7 @@ app.get("/", function (req, res) {
   res.status(200).json(resObj);
 });
 
-//not found controller
-app.use("*", errorRouter);
+
 
 //test database connection
 testConnection();
