@@ -7,37 +7,32 @@ import BusStopRouter from "./routers/bus.stop.router/busStopRouter.js";
 const app = express();
 const PORT = 5000;
 
-//Middleware
-//important for parsing the body
+// Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//user routes
+// Route handlers
 app.use("/user", UserRouter);
 app.use("/busStop", BusStopRouter);
 
-
-//not found controller
-app.use("*", errorRouter);
-
-
-
-
-//GET health controller
-app.get("/", function (req, res) {
-  const resObj = {
-    message: "Server bus stage api is running",
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Server bus stage API is running",
     data: true,
-  };
-  res.status(200).json(resObj);
+  });
 });
 
+// Catch-all route for non-existent endpoints
+app.use("*", errorRouter);
 
+// Test database connection
+testConnection().catch((err) => {
+  console.error("Database connection failed:", err);
+  process.exit(1);
+});
 
-//test database connection
-testConnection();
-
-// start server
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
