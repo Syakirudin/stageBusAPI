@@ -1,9 +1,8 @@
 import express from "express";
-import { router } from "./routers/index.router.js";
-import { mathRouter } from "./routers/math.router.js";
 import { errorRouter } from "./routers/error.router.js";
 import { pool, testConnection } from "./db/connection.js";
-import { createUser } from "./controllers/user.controller/user.controller.js";
+import UserRouter from "./routers/user.router/userRouter.js";
+import BusStopRouter from "./routers/bus.stop.router/busStopRouter.js";
 
 const app = express();
 const PORT = 5000;
@@ -13,11 +12,9 @@ const PORT = 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", router);
-app.use("/", mathRouter);
-
 //user routes
-app.post("/users", createUser);
+app.use("/user", UserRouter);
+app.use("/busStop", BusStopRouter);
 
 //GET health controller
 app.get("/", function (req, res) {
