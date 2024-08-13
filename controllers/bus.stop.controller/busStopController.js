@@ -84,7 +84,7 @@ class BusStopController {
 
     async deleteBusStop(req, res) {
         const id = req.params.id;
-        try {   
+        try {
             const deletedBusStop = await BusStopModel.delete(id);
             if (!deletedBusStop) {
                 return res.status(404).json({
@@ -92,16 +92,18 @@ class BusStopController {
                 });
             }
             res.status(200).json({
-                message: "Bus stop deleted successfully",   
+                message: "Bus stop deleted successfully",
                 bus_stop: deletedBusStop,
             });
         } catch (error) {
-            console.error('Error deleting bus stop:', error.message); // Log error details
+            console.error('Error while deleting bus stop:', error);  // Log the full error object
             res.status(500).json({
                 message: "Internal server error",
+                error: error.message  // Include the error message in the response
             });
-        }   
+        }
     }
+    
 }
 
 export default new BusStopController();
