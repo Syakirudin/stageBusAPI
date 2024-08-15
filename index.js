@@ -1,27 +1,33 @@
 import express from "express";
-import cors from "cors";
 import { errorRouter } from "./routers/error.router.js";
 import { pool, testConnection } from "./db/connection.js";
 import UserRouter from "./routers/user.router/userRouter.js";
 import BusStopRouter from "./routers/bus.stop.router/busStopRouter.js";
+import cors from "cors";
+
+
 
 const app = express();
 const PORT = 5000;
 
-// CORS configuration
-app.use(
-  cors({
-    origin: "http://localhost:3000", // Allow only the React frontend
-  })
-);
+
+//cors dependency
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow only the React frontend
+}));
 
 // Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Route handlers
-app.use("/user/users", UserRouter); // Adjusted path to match frontend expectations
-app.use("/bus/busStop", BusStopRouter); // Adjusted path to match frontend expectations
+app.use("/api", UserRouter);
+app.use("/api", BusStopRouter);
+
+
+
+
+
 
 // Health check endpoint
 app.get("/", (req, res) => {
