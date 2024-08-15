@@ -1,6 +1,6 @@
 // backend/controllers/userController.js
 
-import UserModel from "../../models/user.model/userModel.js";
+import UserModel from "../../models/userModel.js";
 
 class UserController {
   async createUser(req, res) {

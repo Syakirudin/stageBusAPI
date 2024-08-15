@@ -1,5 +1,5 @@
 import express from "express";
-import BusStopController from "../../controllers/bus.stop.controller/busStopController.js";
+import BusStopController from ".././controllers/busStopController.js";
 
 const BusStopRouter = express.Router();
 

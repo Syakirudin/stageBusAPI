@@ -1,4 +1,4 @@
-import BusStopModel from "../../models/bus.stop.model/busStopModel.js";
+import BusStopModel from "../../models/busStopModel.js";
 
 class BusStopController {
   async createBusStop(req, res) {

@@ -1,11 +1,22 @@
 // backend/models/userModel.js
 
-import { pool } from "../../db/connection.js";
+import { pool } from "../db/connection.js";
 
 class UserModel {
-  async create(full_name, email, password_hash, phone_number, role = "user",area,district,level,coordinate) {
+  async create(
+    full_name,
+    email,
+    password_hash,
+    phone_number,
+    role = "user",
+    area,
+    district,
+    level,
+    coordinate,
+    created_at
+  ) {
     const query = `
-        INSERT INTO users (full_name, email, password_hash, phone_number, role, area, district, level, coordinate) 
+        INSERT INTO users (full_name, email, password_hash, phone_number, role, area, district, level, coordinate, created_at) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
         RETURNING *;`;
 
@@ -20,6 +31,7 @@ class UserModel {
         district,
         level,
         coordinate,
+        created_at,
       ]);
       return dbRes.rows[0];
     } catch (error) {
@@ -49,7 +61,18 @@ class UserModel {
 
   // backend/models/userModel.js
   async update(id, updatedFields) {
-    const { full_name, email, password_hash, phone_number, role, area, district, level, coordinate } = updatedFields;
+    const {
+      full_name,
+      email,
+      password_hash,
+      phone_number,
+      role,
+      area,
+      district,
+      level,
+      coordinate,
+      created_at,
+    } = updatedFields;
     const query = `
       UPDATE users SET 
         full_name = $1, 
@@ -61,11 +84,12 @@ class UserModel {
         district = $7,
         level = $8,
         coordinate = $9
-      WHERE id = $10
+        created_at = $10
+      WHERE id = $11
       RETURNING *;`;
-  
+
     try {
-      console.log('Updating user with ID:', id); // Add this line
+      console.log("Updating user with ID:", id); // Add this line
       const dbRes = await pool.query(query, [
         full_name,
         email,
@@ -76,17 +100,16 @@ class UserModel {
         district,
         level,
         coordinate,
+        created_at,
         id,
       ]);
-      console.log('Update result:', dbRes.rows[0]); // Add this line
+      console.log("Update result:", dbRes.rows[0]); // Add this line
       return dbRes.rows[0];
     } catch (error) {
-      console.error('Database update error:', error);
+      console.error("Database update error:", error);
       throw new Error("Unable to update user");
     }
   }
-  
-
 
   async delete(id) {
     const query = `DELETE FROM users WHERE id = $1 RETURNING *;`;
