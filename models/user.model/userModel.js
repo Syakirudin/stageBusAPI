@@ -47,24 +47,25 @@ class UserModel {
     }
   }
 
+  // backend/models/userModel.js
   async update(id, updatedFields) {
-    const { full_name, email, password_hash, phone_number, role ,area,district,level,coordinate} =
-      updatedFields;
+    const { full_name, email, password_hash, phone_number, role, area, district, level, coordinate } = updatedFields;
     const query = `
-        UPDATE users SET 
+      UPDATE users SET 
         full_name = $1, 
         email = $2, 
         password_hash = $3, 
         phone_number = $4, 
-        role = $5 
-        area = $6
-        district = $7
-        level = $8
+        role = $5,
+        area = $6,
+        district = $7,
+        level = $8,
         coordinate = $9
-        WHERE id = $10
-        RETURNING *;`;
-
+      WHERE id = $10
+      RETURNING *;`;
+  
     try {
+      console.log('Updating user with ID:', id); // Add this line
       const dbRes = await pool.query(query, [
         full_name,
         email,
@@ -77,11 +78,15 @@ class UserModel {
         coordinate,
         id,
       ]);
+      console.log('Update result:', dbRes.rows[0]); // Add this line
       return dbRes.rows[0];
     } catch (error) {
+      console.error('Database update error:', error);
       throw new Error("Unable to update user");
     }
   }
+  
+
 
   async delete(id) {
     const query = `DELETE FROM users WHERE id = $1 RETURNING *;`;

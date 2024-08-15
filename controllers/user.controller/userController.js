@@ -53,7 +53,9 @@ class UserController {
   async updateUser(req, res) {
     const userId = req.params.id;
     const updatedFields = req.body;
-
+  
+    console.log('Updating user:', userId, updatedFields); // Add this line
+  
     try {
       const updatedUser = await UserModel.update(userId, updatedFields);
       res.status(200).json({
@@ -67,6 +69,9 @@ class UserController {
       });
     }
   }
+  
+
+  
 
   async deleteUser(req, res) {
     const userId = req.params.id;
