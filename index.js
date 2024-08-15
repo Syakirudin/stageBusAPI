@@ -5,6 +5,16 @@ import UserRouter from "./routers/userRouter.js";
 import BusRouter from "./routers/busRouter.js";
 import BusStopRouter from "./routers/busStopRouter.js";
 import RoutesRouter from "./routers/routesRouter.js";
+import TripsRouter from "./routers/tripsRouter.js";
+
+
+
+
+
+
+
+
+
 import cors from "cors";
 
 const app = express();
@@ -26,6 +36,11 @@ app.use("/api", UserRouter);
 app.use("/api", BusStopRouter);
 app.use("/api", BusRouter);
 app.use("/api", RoutesRouter);
+app.use("/api", TripsRouter);
+
+
+
+
 
 // Health check endpoint
 app.get("/", (req, res) => {

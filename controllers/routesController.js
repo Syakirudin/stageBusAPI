@@ -1,4 +1,4 @@
-import RoutesModel from "../../models/routesModel.js";
+import RoutesModel from "../models/routesModel.js";
 
 class RoutesController {
     async createRoute(req, res) {
