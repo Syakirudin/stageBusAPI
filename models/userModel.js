@@ -17,7 +17,7 @@ class UserModel {
   ) {
     const query = `
         INSERT INTO users (full_name, email, password_hash, phone_number, role, area, district, level, coordinate, created_at) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
         RETURNING *;`;
 
     try {
@@ -83,13 +83,13 @@ class UserModel {
         area = $6,
         district = $7,
         level = $8,
-        coordinate = $9
+        coordinate = $9,
         created_at = $10
       WHERE id = $11
       RETURNING *;`;
-
+  
     try {
-      console.log("Updating user with ID:", id); // Add this line
+      console.log("Updating user with ID:", id);
       const dbRes = await pool.query(query, [
         full_name,
         email,
@@ -103,13 +103,14 @@ class UserModel {
         created_at,
         id,
       ]);
-      console.log("Update result:", dbRes.rows[0]); // Add this line
+      console.log("Update result:", dbRes.rows[0]);
       return dbRes.rows[0];
     } catch (error) {
       console.error("Database update error:", error);
-      throw new Error("Unable to update user");
+      throw new Error(`Unable to update user: ${error.message}`);
     }
   }
+  
 
   async delete(id) {
     const query = `DELETE FROM users WHERE id = $1 RETURNING *;`;

@@ -1,30 +1,37 @@
-// backend/controllers/userController.js
-
 import UserModel from "../models/userModel.js";
 
 class UserController {
   async createUser(req, res) {
-    const { full_name, email, password_hash, phone_number, role } = req.body;
-
+    const { full_name, email, password_hash, phone_number, role, area, district, level, coordinate, created_at } = req.body;
+  
+    console.log("Creating user:", { full_name, email, password_hash, phone_number, role, area, district, level, coordinate, created_at });
+  
     try {
       const newUser = await UserModel.create(
         full_name,
         email,
         password_hash,
         phone_number,
-        role
+        role,
+        area,
+        district,
+        level,
+        coordinate,
+        created_at
       );
       res.status(201).json({
         message: "User created successfully",
         user: newUser,
       });
     } catch (error) {
-      console.log(error);
+      console.error("Error creating user:", error);
       res.status(500).json({
         message: "Internal server error",
       });
     }
   }
+  
+  
 
   async getUser(req, res) {
     const userId = req.params.id;
@@ -35,7 +42,7 @@ class UserController {
       }
       res.status(200).json(user);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching user:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
@@ -45,7 +52,7 @@ class UserController {
       const users = await UserModel.findAll();
       res.status(200).json(users);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching users:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
@@ -53,9 +60,7 @@ class UserController {
   async updateUser(req, res) {
     const userId = req.params.id;
     const updatedFields = req.body;
-  
-    console.log('Updating user:', userId, updatedFields); // Add this line
-  
+
     try {
       const updatedUser = await UserModel.update(userId, updatedFields);
       res.status(200).json({
@@ -63,15 +68,12 @@ class UserController {
         user: updatedUser,
       });
     } catch (error) {
-      console.log(error);
+      console.error("Error updating user:", error);
       res.status(500).json({
         message: "Internal server error",
       });
     }
   }
-  
-
-  
 
   async deleteUser(req, res) {
     const userId = req.params.id;
@@ -83,7 +85,7 @@ class UserController {
         user: deletedUser,
       });
     } catch (error) {
-      console.log(error);
+      console.error("Error deleting user:", error);
       res.status(500).json({
         message: "Internal server error",
       });

@@ -5,16 +5,16 @@ async function createUsersTable() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
-      full_name VARCHAR(100) NOT NULL,
-      email VARCHAR(100) UNIQUE NOT NULL,
-      password_hash VARCHAR(255) NOT NULL,
-      phone_number VARCHAR(15),
-      role VARCHAR(50) DEFAULT 'user',  -- 'user' or 'admin'
-      area VARCHAR(100),
-      district VARCHAR(100),
+      full_name VARCHAR(255),
+      email VARCHAR(255) UNIQUE,
+      password_hash VARCHAR(255),
+      phone_number VARCHAR(50),
+      role VARCHAR(50),
+      area VARCHAR(255),
+      district VARCHAR(255),
       level VARCHAR(50),
       coordinate VARCHAR(255),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP
     );
   `);
 }
