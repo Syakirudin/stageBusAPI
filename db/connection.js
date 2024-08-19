@@ -1,18 +1,22 @@
 import pg from "pg";
 import { createAllTables} from "../models/tableConnection.js";
+import dotenv from "dotenv";
+
+
 
 
 const { Pool } = pg;
+dotenv.config();
 
 //connection with database
 const pool = new Pool({
-  host: "127.0.0.1",
-  user: "postgres",
-  password: "12345",
-  database: "intercity_bus",
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  max: parseInt(process.env.DB_MAX, 10),
+  idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT, 10),
+  connectionTimeoutMillis: parseInt(process.env.DB_CONN_TIMEOUT, 10),
 });
 
 async function testConnection() {
