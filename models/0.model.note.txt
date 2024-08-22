@@ -1,3 +1,32 @@
 model is where database query is done
 
 MODEL --> Controller --> router --> index.js
+
+
+
+
+const classToExport ={
+    city : new City(),
+    pet: new Pet()
+}
+
+
+
+export default ClassName; // import class
+import ClassName from './path'
+
+const objectsToExport = {
+    car : new Car(),
+    fruit: new Fruit()
+}
+
+
+export default objectsToExport
+import {car,fruit} from './path'
+
+
+
+export default new ClassName(); 
+import {ClassName, } from './path' //import object
+
+
