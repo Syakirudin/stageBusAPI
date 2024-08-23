@@ -55,6 +55,7 @@ class UserModel {
       const dbRes = await pool.query(query);
       return dbRes.rows;
     } catch (error) {
+      console.error("Error in UserModel.findAll:", error); // Log the actual error
       throw new Error("Unable to fetch users");
     }
   }

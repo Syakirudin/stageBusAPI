@@ -14,9 +14,13 @@ const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  max: parseInt(process.env.DB_MAX, 10),
-  idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT, 10),
-  connectionTimeoutMillis: parseInt(process.env.DB_CONN_TIMEOUT, 10),
+  port: process.env.DB_PORT || 5432,  // Default port for PostgreSQL
+  max: parseInt(process.env.DB_MAX, 10) || 10,  // Default max connections
+  idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT, 10) || 30000,  // 30 seconds
+  connectionTimeoutMillis: parseInt(process.env.DB_CONN_TIMEOUT, 10) || 2000,  // 2 seconds
+  ssl: {
+    rejectUnauthorized: false,  // This is often required for secure connections on Render
+  },
 });
 
 async function testConnection() {
