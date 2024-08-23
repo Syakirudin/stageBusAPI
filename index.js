@@ -6,7 +6,9 @@ import UserRouter from "./routers/userRouter.js";
 
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+// const PORT = process.env.PORT || 5000;
+
+
 
 
 
@@ -45,6 +47,6 @@ testConnection().catch((err) => {
 // Start server
 
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(process.env.PORT , () => {
+  console.log(`Server running on port ${process.env.PORT}`);
 });
