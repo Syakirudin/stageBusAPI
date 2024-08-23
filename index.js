@@ -15,7 +15,7 @@ const app = express();
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Allow only the React frontend
+    origin: process.env.ORIGIN || "http://localhost:3000", // Allow only the React frontend
   })
 );
 
