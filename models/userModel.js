@@ -1,125 +1,94 @@
-// backend/models/userModel.js
-
 import { pool } from "../db/connection.js";
 
 class UserModel {
-  async create(
-    full_name,
-    email,
-    password_hash,
-    phone_number,
-    role = "user",
-    area,
-    district,
-    level,
-    coordinate,
-    created_at
-  ) {
+  // Create a new user
+  async create(userData) {
+    const { username, email, password, gender, residence, created_at } = userData;
+
     const query = `
-        INSERT INTO users (full_name, email, password_hash, phone_number, role, area, district, level, coordinate, created_at) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
-        RETURNING *;`;
+      INSERT INTO "User" (username, email, password, gender, residence, created_at)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *;
+    `;
 
     try {
-      const dbRes = await pool.query(query, [
-        full_name,
-        email,
-        password_hash,
-        phone_number,
-        role,
-        area,
-        district,
-        level,
-        coordinate,
-        created_at,
-      ]);
-      return dbRes.rows[0];
+      const result = await pool.query(query, [username, email, password, gender, residence, created_at]);
+      return result.rows[0];
     } catch (error) {
-      throw new Error("Unable to create user");
+      console.error("Error inserting user into database:", error);
+      throw error;
     }
   }
 
+  // Find a user by email
+  async findByEmail(email) {
+    const query = `SELECT * FROM "User" WHERE email = $1`;
+
+    try {
+      const result = await pool.query(query, [email]);
+      return result.rows[0]; // Returns undefined if no user is found
+    } catch (error) {
+      console.error("Error finding user by email:", error);
+      throw error;
+    }
+  }
+
+  // Find a user by ID
   async findById(id) {
-    const query = `SELECT * FROM users WHERE id = $1;`;
+    const query = `SELECT * FROM "User" WHERE id = $1`;
+
     try {
-      const dbRes = await pool.query(query, [id]);
-      return dbRes.rows[0];
+      const result = await pool.query(query, [id]);
+      return result.rows[0]; // Returns undefined if no user is found
     } catch (error) {
-      throw new Error("User not found");
+      console.error("Error finding user by ID:", error);
+      throw error;
     }
   }
 
-  async findAll() {
-    const query = `SELECT * FROM users;`;
-    try {
-      const dbRes = await pool.query(query);
-      return dbRes.rows;
-    } catch (error) {
-      console.error("Error in UserModel.findAll:", error); // Log the actual error
-      throw new Error("Unable to fetch users");
-    }
-  }
+  // Update a user
+  async update(id, updateData) {
+    const { username, email, password, gender, residence } = updateData;
 
-  // backend/models/userModel.js
-  async update(id, updatedFields) {
-    const {
-      full_name,
-      email,
-      password_hash,
-      phone_number,
-      role,
-      area,
-      district,
-      level,
-      coordinate,
-      created_at,
-    } = updatedFields;
     const query = `
-      UPDATE users SET 
-        full_name = $1, 
-        email = $2, 
-        password_hash = $3, 
-        phone_number = $4, 
-        role = $5,
-        area = $6,
-        district = $7,
-        level = $8,
-        coordinate = $9,
-        created_at = $10
-      WHERE id = $11
-      RETURNING *;`;
-  
+      UPDATE "User"
+      SET username = $1, email = $2, password = $3, gender = $4, residence = $5, updated_at = $6
+      WHERE id = $7
+      RETURNING *;
+    `;
+
     try {
-      console.log("Updating user with ID:", id);
-      const dbRes = await pool.query(query, [
-        full_name,
-        email,
-        password_hash,
-        phone_number,
-        role,
-        area,
-        district,
-        level,
-        coordinate,
-        created_at,
-        id,
-      ]);
-      console.log("Update result:", dbRes.rows[0]);
-      return dbRes.rows[0];
+      const result = await pool.query(query, [username, email, password, gender, residence, new Date(), id]);
+      return result.rows[0]; // Returns the updated user
     } catch (error) {
-      console.error("Database update error:", error);
-      throw new Error(`Unable to update user: ${error.message}`);
+      console.error("Error updating user in database:", error);
+      throw error;
     }
   }
-  
 
+  // Delete a user by ID
   async delete(id) {
-    const query = `DELETE FROM users WHERE id = $1 RETURNING *;`;
+    const query = `DELETE FROM "User" WHERE id = $1 RETURNING *;`;
+
     try {
-      const dbRes = await pool.query(query, [id]);
-      return dbRes.rows[0];
+      const result = await pool.query(query, [id]);
+      return result.rows[0]; // Returns the deleted user
     } catch (error) {
-      throw new Error("Unable to delete user");
+      console.error("Error deleting user from database:", error);
+      throw error;
+    }
+  }
+
+  // Retrieve all users (optional method)
+  async findAll() {
+    const query = `SELECT * FROM "User";`;
+
+    try {
+      const result = await pool.query(query);
+      return result.rows; // Returns all users
+    } catch (error) {
+      console.error("Error retrieving users from database:", error);
+      throw error;
     }
   }
 }
