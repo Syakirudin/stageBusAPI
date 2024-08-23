@@ -8,20 +8,19 @@ import dotenv from "dotenv";
 const { Pool } = pg;
 dotenv.config();
 
-//connection with database
+// connection with database
 const pool = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT || 5432,  // Default port for PostgreSQL
-  // max: parseInt(process.env.DB_MAX, 10) || 10,  // Default max connections
-  // idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT, 10) || 30000,  // 30 seconds
-  // connectionTimeoutMillis: parseInt(process.env.DB_CONN_TIMEOUT, 10) || 2000,  // 2 seconds
-  // ssl: {
-  //   rejectUnauthorized: false,  // This is often required for secure connections on Render
-  // },
+  connectionString: process.env.POSTGRES_URL,
 });
+
+// const pool = new Pool({
+//   connectionString: process.env.POSTGRES_URL,
+// })
 
 async function testConnection() {
   //try-catch block
