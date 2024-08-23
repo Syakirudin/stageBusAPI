@@ -15,7 +15,7 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT || 5432,  // Default port for PostgreSQL
-  connectionString: process.env.POSTGRES_URL,
+  // connectionString: process.env.POSTGRES_URL,
 });
 
 // const pool = new Pool({
