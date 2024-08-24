@@ -2,28 +2,25 @@ import pg from "pg";
 // import { createAllTables} from "../models/tableConnection.js";
 import dotenv from "dotenv";
 
-
-
-
 const { Pool } = pg;
 dotenv.config();
 
 // connection with database
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 5432, 
-  
-  
-  
-  
-});
-
 // const pool = new Pool({
-//   connectionString: process.env.POSTGRES_URL,
-// })
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_NAME,
+//   port: process.env.DB_PORT,
+// });
+
+const pool = new Pool({
+  host: process.env.LOCAL_DB_HOST,
+  user: process.env.LOCAL_DB_USER,
+  password: process.env.LOCAL_DB_PASSWORD,
+  database: process.env.LOCAL_DB_NAME,
+  port: process.env.LOCAL_PORT,
+});
 
 async function testConnection() {
   //try-catch block
@@ -36,9 +33,6 @@ async function testConnection() {
     console.log(
       `Database connection successful with ${name}'s database at ${time}`
     );
-
-    
-
   } catch (err) {
     console.log("Database connection failed");
     console.log(err);

@@ -4,18 +4,13 @@ import { errorRouter } from "./routers/error.router.js";
 import { testConnection } from "./db/connection.js";
 import UserRouter from "./routers/userRouter.js";
 
-
 const app = express();
 // const PORT = process.env.PORT || 5000;
-
-
-
-
 
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.ORIGIN || "http://localhost:3000", // Allow only the React frontend
+    origin: process.env.ORIGIN || "http://localhost:3000",
   })
 );
 
@@ -25,7 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route handlers
 app.use("/", UserRouter);
-
 
 // Health check endpoint
 app.get("/", (req, res) => {
@@ -46,7 +40,6 @@ testConnection().catch((err) => {
 
 // Start server
 
-
-app.listen(process.env.PORT , () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+app.listen(process.env.LOCAL_PORT, () => {
+  console.log(`Server running on port http://localhost:${process.env.LOCAL_PORT}`);
 });
