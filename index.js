@@ -3,6 +3,7 @@ import cors from "cors";
 import { errorRouter } from "./routers/error.router.js";
 import { testConnection } from "./db/connection.js";
 import UserRouter from "./routers/userRouter.js";
+import StopRouter from "./routers/stopRouter.js";
 
 const app = express();
 // const PORT = process.env.PORT || 5000;
@@ -10,7 +11,7 @@ const app = express();
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.ORIGIN || "http://localhost:3000",
+    origin: "http://localhost:3000",
   })
 );
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route handlers
 app.use("/", UserRouter);
+app.use("/", StopRouter); 
 
 // Health check endpoint
 app.get("/", (req, res) => {
@@ -40,6 +42,8 @@ testConnection().catch((err) => {
 
 // Start server
 
-app.listen(process.env.LOCAL_PORT, () => {
-  console.log(`Server running on port http://localhost:${process.env.LOCAL_PORT}`);
+app.listen(process.env.SERVER_PORT || 5000, () => {
+  console.log(
+    `Server running on http://localhost:${process.env.SERVER_PORT || 5000}`
+  );
 });

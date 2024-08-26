@@ -1,3 +1,4 @@
+
 import { pool } from "../db/connection.js";
 
 class UserModel {
