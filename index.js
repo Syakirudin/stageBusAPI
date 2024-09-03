@@ -3,8 +3,7 @@ import cors from "cors";
 import { errorRouter } from "./routers/error.router.js";
 import { testConnection } from "./db/connection.js";
 import UserRouter from "./routers/userRouter.js";
-import StopRouter from "./routers/stopRouter.js";
-import RouteStopRouter from "./routers/routeStopRouter.js";
+import StopsRoutes from './routers/stopsRoutes.js';
 
 const app = express();
 // const PORT = process.env.PORT || 5000;
@@ -22,8 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route handlers
 app.use("/", UserRouter);
-app.use("/", StopRouter); 
-app.use("/", RouteStopRouter); 
+app.use('/', StopsRoutes);
 
 // Health check endpoint
 app.get("/", (req, res) => {
