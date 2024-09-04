@@ -3,15 +3,22 @@ import cors from "cors";
 import { errorRouter } from "./routers/error.router.js";
 import { testConnection } from "./db/connection.js";
 import UserRouter from "./routers/userRouter.js";
-import StopsRoutes from './routers/stopsRoutes.js';
+import StopsRoutes from "./routers/stopsRoutes.js";
+
+// Import dotenv using ES module syntax
+if (process.env.NODE_ENV !== "production") {
+  import("dotenv").then((dotenv) => dotenv.config());
+}
 
 const app = express();
-// const PORT = process.env.PORT || 5000;
 
-// CORS configuration
+// CORS configuration based on environment
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.ORIGIN
+        : "http://localhost:3000",
   })
 );
 
@@ -21,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route handlers
 app.use("/", UserRouter);
-app.use('/', StopsRoutes);
+app.use("/", StopsRoutes);
 
 // Health check endpoint
 app.get("/", (req, res) => {
@@ -41,9 +48,13 @@ testConnection().catch((err) => {
 });
 
 // Start server
-
-app.listen(process.env.SERVER_PORT || 5000, () => {
+const PORT = process.env.SERVER_PORT || 5000;
+app.listen(PORT, () => {
   console.log(
-    `Server running on http://localhost:${process.env.SERVER_PORT || 5000}`
+    `Server running on ${
+      process.env.NODE_ENV === "production"
+        ? process.env.ORIGIN
+        : "http://localhost:" + PORT
+    }`
   );
 });

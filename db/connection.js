@@ -1,29 +1,23 @@
 import pg from "pg";
-// import { createAllTables} from "../models/tableConnection.js";
 import dotenv from "dotenv";
 
+// Load environment variables from .env file in non-production environments
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
+
 const { Pool } = pg;
-dotenv.config();
 
-// connection with database
-// const pool = new Pool({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_NAME,
-//   port: process.env.DB_PORT,
-// });
-
+// Dynamically configure the database connection based on the environment
 const pool = new Pool({
-  host: process.env.LOCAL_DB_HOST,
-  user: process.env.LOCAL_DB_USER,
-  password: process.env.LOCAL_DB_PASSWORD,
-  database: process.env.LOCAL_DB_NAME,
-  port: process.env.LOCAL_PORT,
+  host: process.env.NODE_ENV === 'production' ? process.env.DB_HOST : process.env.LOCAL_DB_HOST,
+  user: process.env.NODE_ENV === 'production' ? process.env.DB_USER : process.env.LOCAL_DB_USER,
+  password: process.env.NODE_ENV === 'production' ? process.env.DB_PASSWORD : process.env.LOCAL_DB_PASSWORD,
+  database: process.env.NODE_ENV === 'production' ? process.env.DB_NAME : process.env.LOCAL_DB_NAME,
+  port: process.env.NODE_ENV === 'production' ? process.env.DB_PORT : process.env.LOCAL_DB_PORT,
 });
 
 async function testConnection() {
-  //try-catch block
   try {
     const dbName = await pool.query("SELECT current_database()");
     const dbRes = await pool.query("SELECT NOW()");
@@ -35,19 +29,8 @@ async function testConnection() {
     );
   } catch (err) {
     console.log("Database connection failed");
-    console.log(err);
+    console.error(err);
   }
 }
 
 export { pool, testConnection };
-
-//Promise 101
-// promise is variable for future value
-// since promise is a variable for future value, we need to wait for the value to be available by using asyncronous function
-// WAITING / PENUGGUAN
-// state of promise - pending, fulfilled, rejected
-// fullfilled - value is available / database query is successful
-// rejected - value is not available / database query is failed / error
-// try-catch block
-// try - block of code pending and resolved
-// catch - block of code rejected
