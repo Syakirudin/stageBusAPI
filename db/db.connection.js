@@ -1,11 +1,32 @@
-import { Pool } from 'pg';
+import pkg from 'pg';
+const { Pool } = pkg;
+import dotenv from 'dotenv';
 
+
+
+// Load environment variables
+dotenv.config();
+
+// Create a new database connection pool
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_DATABASE,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 
-export default pool
+
+
+
+// Test the database connection
+(async () => {
+  try {
+    await pool.connect();
+    console.log('Database connected successfully.');
+  } catch (err) {
+    console.error('Database connection error:', err);
+  }
+})();
+
+export default pool;
