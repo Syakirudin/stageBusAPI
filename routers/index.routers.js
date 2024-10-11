@@ -1,7 +1,8 @@
 import express from "express";
-import StopRouter from "./stop.router.js"; 
+import StopRouter from "./stop.router.js";
 import RouteRouter from "./route.router.js";
 import ScheduleRouter from "./schedule.router.js";
+import FareRouter from "./fare.router.js";
 
 const routers = express.Router();
 
@@ -13,5 +14,8 @@ routers.use("/routes", RouteRouter);
 
 // Use the ScheduleRouter for routes starting with /schedules
 routers.use("/schedules", ScheduleRouter);
+
+// Use the fareRouter for routes starting with /fares
+routers.use("/fares", FareRouter);
 
 export default routers;
