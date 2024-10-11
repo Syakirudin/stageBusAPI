@@ -6,7 +6,7 @@ class StopModel {
     const query = `
       CREATE TABLE IF NOT EXISTS stop_point (
           location_name VARCHAR(255) NOT NULL,
-          coordinates JSONB NOT NULL,            -- Store coordinates in JSONB format
+          coordinates JSONB NOT NULL,            
           city_name VARCHAR(255) NOT NULL,
 
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

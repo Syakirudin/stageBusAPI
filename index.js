@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import StopModel from './models/stop.model.js';
 import RouteModel from './models/route.model.js';
+import ScheduleModel from './models/schedule.model.js';
 import routers from './routers/index.routers.js';
 import dotenv from 'dotenv';
 
@@ -27,11 +28,15 @@ app.get('/health', (req, res) => {
   res.status(200).json({ message: "Server is healthy" });
 });
 
-// Global error handling middleware
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).json({ error: "Something went wrong!" });
-// });
+// Centralized error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error
+  const status = err.status || 500; // Set default status
+  const message = err.message || 'Internal Server Error'; // Set default message
+  res.status(status).json({ error: message });
+});
+
+
 
 // Start server
 const PORT = process.env.SERVER_PORT || 5000;
