@@ -1,4 +1,4 @@
-import pool from "../../backend/db/db.connection.js";
+import pool from "../db/db.connection.js";
 
 class RouteService {
   // Create a route and add stops, inserting missing locations into stop_point if necessary

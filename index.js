@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import pool from './db/db.connection.js';
 import StopModel from './models/stop.model.js';
 import RouteModel from './models/route.model.js';
 import ScheduleModel from './models/schedule.model.js';
