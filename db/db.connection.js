@@ -9,11 +9,11 @@ dotenv.config();
 
 // Create a new database connection pool
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  host: process.env.DB_HOST  || process.env.LIVE_DB_HOST ,
+  user: process.env.DB_USER || process.env.LIVE_DB_USER,
+  database: process.env.DB_NAME || process.env.LIVE_DB_NAME,
+  password: process.env.DB_PASSWORD || process.env.LIVE_DB_PASSWORD,
+  port: process.env.DB_PORT || process.env.LIVE_DB_PORT,
 });
 
 

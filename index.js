@@ -19,7 +19,7 @@ app.use(cors({
 
 // Middleware for parsing JSON
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json());
 
 // Example endpoint
 app.use('/api', routers);

@@ -1,4 +1,4 @@
-import pool from '../../backend/db/db.connection.js';
+import pool from "../../backend/db/db.connection.js";
 
 class StopService {
   // Fetch all stop points
