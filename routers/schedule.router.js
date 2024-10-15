@@ -1,14 +1,16 @@
-import express from 'express';
-import ScheduleController from '../controllers/schedule.controller.js';
+import express from "express";
+import ScheduleController from "../controllers/schedule.controller.js";
 
 const ScheduleRouter = express.Router();
 
-ScheduleRouter.get('/', ScheduleController.getAllSchedules);
+ScheduleRouter.get("/", ScheduleController.getAllSchedules);
 
-ScheduleRouter.post('/', ScheduleController.createSchedule);
+ScheduleRouter.post("/", ScheduleController.createSchedule);
 
-ScheduleRouter.put('/:id', ScheduleController.updateSchedule);
+ScheduleRouter.put("/:id", ScheduleController.updateSchedule);
 
-ScheduleRouter.delete('/:id', ScheduleController.deleteSchedule);
+ScheduleRouter.delete("/:id", ScheduleController.deleteSchedule);
+
+ScheduleRouter.get("/:id", ScheduleController.getScheduleById);
 
 export default ScheduleRouter;
