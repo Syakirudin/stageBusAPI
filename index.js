@@ -5,6 +5,7 @@ import StopModel from './models/stop.model.js';
 import RouteModel from './models/route.model.js';
 import ScheduleModel from './models/schedule.model.js';
 import FareModel from './models/fare.model.js';
+import UserModel from './models/user.model.js';
 import routers from './routers/index.routers.js';
 import dotenv from 'dotenv';
 
