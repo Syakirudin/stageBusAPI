@@ -1,14 +1,13 @@
 import express from "express";
+import AuthMiddleware from "../middlewares/auth.middleware.js";
 import StopController from "../controllers/stop.controller.js";
 
 const StopRouter = express.Router();
 
-// Get all stop points
 StopRouter.get("/", StopController.getStop);
 
-// Create a new stop point
-StopRouter.post("/", StopController.createStop);
+StopRouter.post("/", AuthMiddleware.authenticate, StopController.createStop);
 
-// Add more routes for updating and deleting stops as needed
+//StopRouter.post("/", AuthMiddleware.authenticate, StopController.createStop);
 
 export default StopRouter;
