@@ -7,6 +7,11 @@ class ScheduleService {
     try {
       await client.query("BEGIN");
 
+      // Validate trips input
+      if (!Array.isArray(trips) || trips.length === 0) {
+        throw new Error("Invalid trips data. Please provide an array of trips.");
+      }
+
       // Check if from and to locations exist
       const fromStopQuery = `
         SELECT * FROM stop_point WHERE location_name = $1 AND coordinates = $2;
@@ -42,6 +47,11 @@ class ScheduleService {
 
       for (const trip of trips) {
         const { trip_name, trip_times } = trip;
+
+        if (!trip_name || !Array.isArray(trip_times) || trip_times.length === 0) {
+          throw new Error(`Invalid trip data for trip name: ${trip_name}.`);
+        }
+
         await client.query(insertTripQuery, [scheduleId, trip_name, trip_times]);
       }
 
@@ -60,7 +70,7 @@ class ScheduleService {
   static async getAllSchedules() {
     const query = `
       SELECT 
-        s.id as schedule_id,
+        s.id AS schedule_id,
         s.route_no,
         s.from_stop_location_name,
         s.from_stop_coordinates,
@@ -69,7 +79,7 @@ class ScheduleService {
         t.trip_name,
         t.trip_time
       FROM schedule s
-      JOIN trip_time t ON s.id = t.schedule_id;
+      LEFT JOIN trip_time t ON s.id = t.schedule_id;
     `;
 
     try {
@@ -110,10 +120,16 @@ class ScheduleService {
     }
   }
 
+  // Update an existing schedule
   static async updateSchedule(schedule_id, route_no, from_location_name, from_coordinates, to_location_name, to_coordinates, trips) {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
+
+      // Validate trips input
+      if (!Array.isArray(trips) || trips.length === 0) {
+        throw new Error("Invalid trips data. Please provide an array of trips.");
+      }
 
       // Check if from and to locations exist
       const fromStopQuery = `
@@ -157,6 +173,11 @@ class ScheduleService {
 
       for (const trip of trips) {
         const { trip_name, trip_times } = trip;
+
+        if (!trip_name || !Array.isArray(trip_times) || trip_times.length === 0) {
+          throw new Error(`Invalid trip data for trip name: ${trip_name}.`);
+        }
+
         await client.query(insertTripQuery, [schedule_id, trip_name, trip_times]);
       }
 
@@ -186,6 +207,7 @@ class ScheduleService {
     }
   }
 
+  // Get a schedule by ID
   static async getScheduleById(schedule_id) {
     const query = `
       SELECT 
@@ -216,34 +238,6 @@ class ScheduleService {
       throw new Error("Failed to retrieve schedule");
     }
   }
-
-  // Fetch all schedules
-  // static async getAllSchedules() {
-  //   const query = `
-  //     SELECT 
-  //       s.id AS schedule_id,
-  //       s.route_no,
-  //       s.from_stop_location_name,
-  //       s.from_stop_coordinates,
-  //       s.to_stop_location_name,
-  //       s.to_stop_coordinates,
-  //       json_agg(json_build_object(
-  //         'trip_name', t.trip_name,
-  //         'trip_times', t.trip_time
-  //       )) AS trips
-  //     FROM schedule s
-  //     LEFT JOIN trip_time t ON s.id = t.schedule_id
-  //     GROUP BY s.id;
-  //   `;
-
-  //   try {
-  //     const result = await pool.query(query);
-  //     return result.rows;
-  //   } catch (error) {
-  //     console.error("Error retrieving schedules:", error);
-  //     throw new Error("Failed to retrieve schedules");
-  //   }
-  // }
 }
 
 export default ScheduleService;

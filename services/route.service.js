@@ -29,11 +29,11 @@ class RouteService {
       const routeRes = await client.query(insertRouteQuery, [route_no]);
       const newRoute = routeRes.rows[0] || { route_no };
 
-      // Check and insert stop locations into stop_point
+      // Insert stop locations into stop_point
       const insertStopPointQuery = `
         INSERT INTO stop_point (location_name, coordinates, city_name)
         VALUES ($1, $2, $3)
-        ON CONFLICT (location_name, coordinates) DO NOTHING;
+        ON CONFLICT (location_name) DO NOTHING; // Adjusted for unique constraint
       `;
 
       const insertRouteStopQuery = `
@@ -42,16 +42,18 @@ class RouteService {
         RETURNING *;
       `;
 
-      for (let i = 0; i < stops.length; i++) {
-        const { location_name, latitude, longitude, city_name, stop_order } =
-          stops[i];
+      for (let stop of stops) {
+        const { location_name, latitude, longitude, city_name, stop_order } = stop;
         const coordinates = JSON.stringify({ latitude, longitude });
 
+        // Insert or ignore stop points first
         await client.query(insertStopPointQuery, [
           location_name,
           coordinates,
           city_name,
         ]);
+        
+        // Insert route stop after ensuring stop point exists
         await client.query(insertRouteStopQuery, [
           route_no,
           location_name,
@@ -89,18 +91,14 @@ class RouteService {
     `;
 
     try {
-      console.log("Executing query:", query);
       const res = await pool.query(query);
-      console.log("Query result:", JSON.stringify(res.rows));
 
       if (res.rows.length === 0) {
-        console.log("No routes found in the database.");
         return [];
       }
 
       const routes = {};
 
-      // Organize the data into routes and their corresponding stops
       res.rows.forEach((row) => {
         const {
           route_no,
@@ -127,22 +125,19 @@ class RouteService {
         });
       });
 
-      console.log("Organized routes:", JSON.stringify(routes));
       return Object.values(routes);
     } catch (error) {
       console.error("Error fetching routes with stops:", error);
-      throw error; // Re-throw the error to be caught by the controller
+      throw error;
     }
   }
 
-  //update route
-  // In your RouteService.js
+  // Update route
   static async updateRoute(route_no, updatedData) {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
 
-      // Update the route
       const updateRouteQuery = `
       UPDATE route
       SET route_no = $1
@@ -211,7 +206,7 @@ class RouteService {
     }
   }
 
-  //delete route
+  // Delete route
   static async deleteRoute(route_no) {
     const client = await pool.connect();
     try {

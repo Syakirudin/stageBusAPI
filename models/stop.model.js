@@ -3,7 +3,7 @@ import pool from "../db/db.connection.js";
 
 class StopModel {
   static async createStopTable() {
-    const query = `
+    const createTableQuery = `
       CREATE TABLE IF NOT EXISTS stop_point (
           location_name VARCHAR(255) NOT NULL,
           coordinates JSONB NOT NULL,            
@@ -16,11 +16,31 @@ class StopModel {
       );
     `;
 
+    const addUniqueConstraintQuery = `
+      DO $$
+      BEGIN
+          IF NOT EXISTS (
+              SELECT 1 
+              FROM pg_constraint 
+              WHERE conname = 'unique_location_name'
+          ) THEN
+              ALTER TABLE stop_point
+              ADD CONSTRAINT unique_location_name UNIQUE (location_name);
+          END IF;
+      END $$;
+    `;
+
     try {
-      const res = await pool.query(query);
-      console.log("Stop table created or already exists."); // Log the result of the query
+      // Create the stop_point table
+      await pool.query(createTableQuery);
+      console.log("Stop table created or already exists.");
+
+      // Add the unique constraint on location_name if it doesn't exist
+      await pool.query(addUniqueConstraintQuery);
+      console.log("Unique constraint on location_name added (if it was not already present).");
+      
     } catch (error) {
-      console.error("Error creating Stop table:", error.message); // Log the error message
+      console.error("Error setting up Stop table:", error.message); // Log the error message
     }
   }
 }

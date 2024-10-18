@@ -1,23 +1,24 @@
-// models/fare.model.js
 import pool from "../db/db.connection.js";
 
 class FareModel {
   static async createFareTable() {
     const query = `
       CREATE TABLE IF NOT EXISTS fare (
-    id SERIAL PRIMARY KEY,
-    from_location_name VARCHAR(255) NOT NULL,
-    from_coordinates JSONB NOT NULL,
-    to_location_name VARCHAR(255) NOT NULL,
-    to_coordinates JSONB NOT NULL,
-    amount_of_fare NUMERIC NOT NULL,
+        id SERIAL PRIMARY KEY,
+        route_no VARCHAR(50) NOT NULL,
+        from_location_name VARCHAR(255) NOT NULL,
+        to_location_name VARCHAR(255) NOT NULL,
+        amount_of_fare NUMERIC NOT NULL,
 
-    FOREIGN KEY (from_location_name, from_coordinates) 
-        REFERENCES stop_point(location_name, coordinates),
-    FOREIGN KEY (to_location_name, to_coordinates) 
-        REFERENCES stop_point(location_name, coordinates)
-);
+        FOREIGN KEY (route_no) 
+            REFERENCES route(route_no) ON DELETE CASCADE, -- Ensure fare is linked to a valid route
+        FOREIGN KEY (from_location_name) 
+            REFERENCES stop_point(location_name) ON DELETE CASCADE,
+        FOREIGN KEY (to_location_name) 
+            REFERENCES stop_point(location_name) ON DELETE CASCADE,
 
+        UNIQUE (route_no, from_location_name, to_location_name) -- Prevent duplicate fares for the same route and stop pair
+      );
     `;
 
     try {

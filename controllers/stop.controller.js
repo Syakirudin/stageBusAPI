@@ -20,6 +20,12 @@ class StopController {
       res.status(201).json(newStop);
     } catch (error) {
       console.error('Error creating stop point:', error);
+      
+      // Handle specific error for duplicate location name
+      if (error.message.includes("A stop with this location name already exists")) {
+        return res.status(400).json({ error: error.message }); // Bad Request
+      }
+
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }

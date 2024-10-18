@@ -1,16 +1,22 @@
 import express from "express";
-import AuthMiddleware from "../middlewares/auth.middleware.js";
+// import AuthMiddleware from "../middlewares/auth.middleware.js";
 import FareController from "../controllers/fare.controller.js";
-
 
 const FareRouter = express.Router();
 
-FareRouter.post("/", AuthMiddleware.authenticate, FareController.createFare);
+// Route for adding fares
+FareRouter.post("/", FareController.addFares);
 
-FareRouter.get("/", FareController.getAllFares);
+// Route for getting all fares for a specific route
+FareRouter.get("/:route_no", FareController.getFares);
 
-FareRouter.put("/:id", AuthMiddleware.authenticate, FareController.updateFare);
+// Route for getting a fare by ID
+FareRouter.get("/fare/:id", FareController.getFareById);
 
-FareRouter.delete("/:id", AuthMiddleware.authenticate, FareController.deleteFare);
+// Route for updating a fare by ID
+FareRouter.put("/fare/:id", FareController.updateFareById);
+
+// Route for deleting a fare by ID
+FareRouter.delete("/fare/:id", FareController.deleteFareById);
 
 export default FareRouter;
