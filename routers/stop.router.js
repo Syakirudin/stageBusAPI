@@ -4,10 +4,10 @@ import StopController from "../controllers/stop.controller.js";
 
 const StopRouter = express.Router();
 
+// Get all stop points - accessible to all authenticated users
 StopRouter.get("/", StopController.getStop);
 
-StopRouter.post("/", AuthMiddleware.authenticate, StopController.createStop);
-
-//StopRouter.post("/", AuthMiddleware.authenticate, StopController.createStop);
+// Create a new stop point - accessible only to authenticated users with specific roles
+StopRouter.post("/", AuthMiddleware.authenticate, AuthMiddleware.verifyRole(["admin", "super-admin"]), StopController.createStop);
 
 export default StopRouter;
