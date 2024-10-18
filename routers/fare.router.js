@@ -7,6 +7,9 @@ const FareRouter = express.Router();
 // Route for adding fares
 FareRouter.post("/", FareController.addFares);
 
+// Route for getting all fares
+FareRouter.get("/", FareController.getAllFares);
+
 // Route for getting all fares for a specific route
 FareRouter.get("/:route_no", FareController.getFares);
 

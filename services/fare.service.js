@@ -37,6 +37,19 @@ class FareService {
     }
   }
 
+  // Retrieve all fares
+static async getAllFares() {
+  const query = `SELECT * FROM fare;`;
+
+  try {
+    const result = await pool.query(query);
+    return result.rows;
+  } catch (error) {
+    throw new Error("Error retrieving fares: " + error.message);
+  }
+}
+
+
   static async getFares(route_no) {
     const query = `
       SELECT * FROM fare WHERE route_no = $1;

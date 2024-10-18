@@ -23,6 +23,18 @@ class FareController {
     }
   }
 
+  // Controller for retrieving all fares
+static async getAllFares(req, res) {
+  try {
+    const fares = await FareService.getAllFares();
+    return res.status(200).json(fares);
+  } catch (error) {
+    console.error("Error fetching all fares:", error);
+    return res.status(500).json({ error: "Failed to fetch fares." });
+  }
+}
+
+
   static async getFares(req, res) {
     const { route_no } = req.params;
 
@@ -80,7 +92,7 @@ class FareController {
       return res.status(404).json({ error: error.message });
     }
   }
-  
+
 }
 
 export default FareController;
